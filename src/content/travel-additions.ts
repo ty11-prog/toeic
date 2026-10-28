@@ -1,0 +1,678 @@
+import type { Word } from "../data";
+
+// Original examples; the displayed level is an editorial learning target.
+const entries: Omit<Word, "id" | "category" | "level">[] = [
+  {
+    word: "arrival",
+    phonetic: "/əˈraɪvəl/",
+    partOfSpeech: "n.",
+    meaning: "抵達；到達",
+    definition: "The act of reaching a place at the end of a journey.",
+    example: "Please call the hotel upon your arrival at the airport.",
+    translation: "抵達機場時，請致電飯店。",
+    collocation: "upon arrival 抵達時",
+  },
+  {
+    word: "delay",
+    phonetic: "/dɪˈleɪ/",
+    partOfSpeech: "n.",
+    meaning: "延誤；延遲",
+    definition:
+      "A period of time during which something happens later than expected.",
+    example: "Heavy snow caused a two-hour delay to our flight.",
+    translation: "大雪導致我們的航班延誤兩小時。",
+    collocation: "a flight delay 航班延誤",
+  },
+  {
+    word: "terminal",
+    phonetic: "/ˈtɝːmənəl/",
+    partOfSpeech: "n.",
+    meaning: "航廈；交通總站",
+    definition:
+      "A building where passengers begin or end a journey by air, bus, or ship.",
+    example: "International flights depart from Terminal Two.",
+    translation: "國際航班從第二航廈出發。",
+    collocation: "an airport terminal 機場航廈",
+  },
+  {
+    word: "platform",
+    phonetic: "/ˈplætfɔːrm/",
+    partOfSpeech: "n.",
+    meaning: "月台",
+    definition:
+      "A raised area beside a railway track where passengers get on or off trains.",
+    example: "The train to the airport leaves from platform six.",
+    translation: "前往機場的列車從第六月台發車。",
+    collocation: "a railway platform 鐵路月台",
+  },
+  {
+    word: "passenger",
+    phonetic: "/ˈpæsəndʒɚ/",
+    partOfSpeech: "n.",
+    meaning: "乘客；旅客",
+    definition:
+      "A person traveling in a vehicle who is not driving it or working on it.",
+    example: "Each passenger may bring one small bag into the cabin.",
+    translation: "每位乘客可攜帶一個小包進入客艙。",
+    collocation: "an airline passenger 航空旅客",
+  },
+  {
+    word: "aisle",
+    phonetic: "/aɪl/",
+    partOfSpeech: "n.",
+    meaning: "座位間的走道",
+    definition:
+      "A passage between rows of seats, such as on an airplane or in a theater.",
+    example: "Please keep the aisle clear while the passengers are boarding.",
+    translation: "旅客登機時，請保持走道暢通。",
+    collocation: "an aisle seat 靠走道的座位",
+  },
+  {
+    word: "luggage",
+    phonetic: "/ˈlʌɡɪdʒ/",
+    partOfSpeech: "n.",
+    meaning: "行李（不可數）",
+    definition: "The bags and suitcases that a person takes when traveling.",
+    example:
+      "You can leave your luggage at the front desk until your room is ready.",
+    translation: "房間準備好之前，您可以將行李寄放在櫃台。",
+    collocation: "a piece of luggage 一件行李",
+  },
+  {
+    word: "passport",
+    phonetic: "/ˈpæspɔːrt/",
+    partOfSpeech: "n.",
+    meaning: "護照",
+    definition:
+      "An official document that identifies a person and allows international travel.",
+    example:
+      "Make sure your passport is valid before booking an international flight.",
+    translation: "預訂國際航班之前，請確認您的護照仍在有效期限內。",
+    collocation: "a valid passport 有效護照",
+  },
+  {
+    word: "visa",
+    phonetic: "/ˈviːzə/",
+    partOfSpeech: "n.",
+    meaning: "簽證",
+    definition:
+      "Official permission to enter or stay in a foreign country for a particular purpose.",
+    example:
+      "Travelers who need a visa should apply well before their departure date.",
+    translation: "需要簽證的旅客應在出發日期前及早申請。",
+    collocation: "apply for a visa 申請簽證",
+  },
+  {
+    word: "immigration",
+    phonetic: "/ˌɪməˈɡreɪʃən/",
+    partOfSpeech: "n.",
+    meaning: "入境查驗；移民事務",
+    definition:
+      "The process of checking travelers' documents when they enter a country.",
+    example: "Have your passport ready when you reach immigration.",
+    translation: "抵達入境查驗處時，請準備好您的護照。",
+    collocation: "go through immigration 通過入境查驗",
+  },
+  {
+    word: "security",
+    phonetic: "/sɪˈkjʊrəti/",
+    partOfSpeech: "n.",
+    meaning: "安全檢查；安全防護",
+    definition: "Measures used to protect people and places from danger.",
+    example:
+      "All passengers must go through security before entering the departure area.",
+    translation: "所有乘客進入出境區之前，都必須通過安全檢查。",
+    collocation: "go through security 通過安全檢查",
+  },
+  {
+    word: "checkpoint",
+    phonetic: "/ˈtʃekpɔɪnt/",
+    partOfSpeech: "n.",
+    meaning: "檢查站；查驗點",
+    definition: "A place where people or vehicles are stopped and checked.",
+    example: "Please show your boarding pass at the security checkpoint.",
+    translation: "請在安全檢查站出示您的登機證。",
+    collocation: "a security checkpoint 安全檢查站",
+  },
+  {
+    word: "embassy",
+    phonetic: "/ˈembəsi/",
+    partOfSpeech: "n.",
+    meaning: "大使館",
+    definition:
+      "The office of a country's official representatives in another country.",
+    example: "Contact your country's embassy if you lose your passport abroad.",
+    translation: "若您在國外遺失護照，請聯絡您所屬國家的大使館。",
+    collocation: "contact an embassy 聯絡大使館",
+  },
+  {
+    word: "declaration",
+    phonetic: "/ˌdekləˈreɪʃən/",
+    partOfSpeech: "n.",
+    meaning: "申報；申報書",
+    definition:
+      "An official statement giving information that an authority requires.",
+    example:
+      "Travelers must list the goods they are bringing in on the customs declaration.",
+    translation: "旅客必須在海關申報書上列出攜入的物品。",
+    collocation: "a customs declaration 海關申報書",
+  },
+  {
+    word: "allowance",
+    phonetic: "/əˈlaʊəns/",
+    partOfSpeech: "n.",
+    meaning: "允許限額；限量",
+    definition:
+      "An amount of something that a person is allowed to have or use.",
+    example: "Check your baggage allowance before packing for the trip.",
+    translation: "為旅程打包之前，請確認您的行李限額。",
+    collocation: "a baggage allowance 行李限額",
+  },
+  {
+    word: "prohibited",
+    phonetic: "/proʊˈhɪbɪtɪd/",
+    partOfSpeech: "adj.",
+    meaning: "被禁止的",
+    definition: "Not allowed by a rule or law.",
+    example:
+      "Passengers should check the list of prohibited items before packing.",
+    translation: "乘客打包之前，應查看禁帶物品清單。",
+    collocation: "prohibited items 禁帶物品",
+  },
+  {
+    word: "connection",
+    phonetic: "/kəˈnekʃən/",
+    partOfSpeech: "n.",
+    meaning: "轉乘班次；銜接交通",
+    definition:
+      "A train, flight, or other service taken after an earlier part of a journey.",
+    example: "We have forty minutes to catch our connection in Chicago.",
+    translation: "我們有四十分鐘可以在芝加哥趕上轉乘班次。",
+    collocation: "miss a connection 錯過轉乘班次",
+  },
+  {
+    word: "nonstop",
+    phonetic: "/ˌnɑːnˈstɑːp/",
+    partOfSpeech: "adj.",
+    meaning: "直達且中途不停靠的",
+    definition: "Continuing to a destination without stopping along the way.",
+    example: "The airline offers a nonstop flight from Taipei to Seattle.",
+    translation: "這家航空公司提供從台北直飛西雅圖、中途不停靠的航班。",
+    collocation: "a nonstop flight 直飛航班",
+  },
+  {
+    word: "domestic",
+    phonetic: "/dəˈmestɪk/",
+    partOfSpeech: "adj.",
+    meaning: "國內的",
+    definition: "Within a particular country rather than between countries.",
+    example:
+      "Domestic flights leave from the smaller terminal next to the main building.",
+    translation: "國內航班從主建築旁較小的航廈出發。",
+    collocation: "a domestic flight 國內航班",
+  },
+  {
+    word: "international",
+    phonetic: "/ˌɪntɚˈnæʃənəl/",
+    partOfSpeech: "adj.",
+    meaning: "國際的；跨國的",
+    definition: "Involving two or more countries.",
+    example:
+      "The city will host an international tourism exhibition next month.",
+    translation: "這座城市下個月將舉辦國際旅遊展。",
+    collocation: "international travel 國際旅行",
+  },
+  {
+    word: "overseas",
+    phonetic: "/ˌoʊvɚˈsiːz/",
+    partOfSpeech: "adv.",
+    meaning: "在國外；往國外",
+    definition: "In or to a foreign country, especially one across the sea.",
+    example:
+      "Employees traveling overseas must keep copies of their travel documents.",
+    translation: "前往國外的員工必須保留旅行證件的副本。",
+    collocation: "travel overseas 出國旅行",
+  },
+  {
+    word: "journey",
+    phonetic: "/ˈdʒɝːni/",
+    partOfSpeech: "n.",
+    meaning: "旅程；一段行程",
+    definition: "An act of traveling from one place to another.",
+    example:
+      "The train journey from the airport to the city center takes forty minutes.",
+    translation: "從機場到市中心的火車旅程需時四十分鐘。",
+    collocation: "a train journey 火車旅程",
+  },
+  {
+    word: "excursion",
+    phonetic: "/ɪkˈskɝːʒən/",
+    partOfSpeech: "n.",
+    meaning: "短途旅遊；遊覽",
+    definition:
+      "A short trip made for pleasure, often as part of a longer visit.",
+    example:
+      "The hotel can arrange a day excursion to the nearby national park.",
+    translation: "飯店可以安排前往鄰近國家公園的一日遊。",
+    collocation: "a day excursion 一日短途旅遊",
+  },
+  {
+    word: "sightseeing",
+    phonetic: "/ˈsaɪtˌsiːɪŋ/",
+    partOfSpeech: "n.",
+    meaning: "觀光；遊覽",
+    definition: "The activity of visiting interesting places as a tourist.",
+    example:
+      "We will have a free afternoon for sightseeing after the conference.",
+    translation: "會議結束後，我們有一個下午可以自由觀光。",
+    collocation: "go sightseeing 去觀光",
+  },
+  {
+    word: "attraction",
+    phonetic: "/əˈtrækʃən/",
+    partOfSpeech: "n.",
+    meaning: "觀光景點；吸引人的事物",
+    definition: "A place or activity that people want to visit or experience.",
+    example:
+      "The historic market is one of the city's most popular attractions.",
+    translation: "這座歷史悠久的市集是這座城市最熱門的景點之一。",
+    collocation: "a tourist attraction 觀光景點",
+  },
+  {
+    word: "landmark",
+    phonetic: "/ˈlændmɑːrk/",
+    partOfSpeech: "n.",
+    meaning: "地標",
+    definition: "A well-known building or place that is easy to recognize.",
+    example:
+      "The walking tour includes several famous landmarks near the river.",
+    translation: "這趟步行導覽涵蓋河邊幾處著名地標。",
+    collocation: "a famous landmark 著名地標",
+  },
+  {
+    word: "admission",
+    phonetic: "/ədˈmɪʃən/",
+    partOfSpeech: "n.",
+    meaning: "入場；入場費",
+    definition: "Permission to enter a place, or the money paid to enter it.",
+    example:
+      "Admission to the museum is free on the first Sunday of each month.",
+    translation: "每個月的第一個星期日，這座博物館免費入場。",
+    collocation: "an admission fee 入場費",
+  },
+  {
+    word: "guide",
+    phonetic: "/ɡaɪd/",
+    partOfSpeech: "n.",
+    meaning: "導遊；嚮導",
+    definition:
+      "A person who shows visitors around a place and explains its features.",
+    example: "Our guide explained the history of each building on the tour.",
+    translation: "導遊在行程中解說了每棟建築的歷史。",
+    collocation: "a tour guide 導遊",
+  },
+  {
+    word: "brochure",
+    phonetic: "/broʊˈʃʊr/",
+    partOfSpeech: "n.",
+    meaning: "簡介手冊；宣傳小冊",
+    definition:
+      "A small booklet that gives information about a place, product, or service.",
+    example:
+      "Pick up a brochure at the visitor center for details of local tours.",
+    translation: "請在遊客中心索取簡介手冊，以了解當地導覽行程的詳細資訊。",
+    collocation: "a travel brochure 旅遊簡介手冊",
+  },
+  {
+    word: "tourist",
+    phonetic: "/ˈtʊrɪst/",
+    partOfSpeech: "n.",
+    meaning: "觀光客；遊客",
+    definition: "A person who travels to a place for pleasure.",
+    example: "Tourists can buy a three-day transport pass at the airport.",
+    translation: "遊客可以在機場購買三日交通票。",
+    collocation: "a tourist information center 遊客資訊中心",
+  },
+  {
+    word: "route",
+    phonetic: "/ruːt/",
+    partOfSpeech: "n.",
+    meaning: "路線；路徑",
+    definition: "The way taken to travel from one place to another.",
+    example:
+      "The driver chose a different route to avoid the road construction.",
+    translation: "司機選擇另一條路線，以避開道路施工。",
+    collocation: "a bus route 公車路線",
+  },
+  {
+    word: "timetable",
+    phonetic: "/ˈtaɪmˌteɪbəl/",
+    partOfSpeech: "n.",
+    meaning: "時刻表",
+    definition:
+      "A list showing when trains, buses, or other services arrive and leave.",
+    example:
+      "Check the updated timetable before traveling during the holiday period.",
+    translation: "假日期間出行前，請確認更新後的時刻表。",
+    collocation: "a train timetable 火車時刻表",
+  },
+  {
+    word: "commute",
+    phonetic: "/kəˈmjuːt/",
+    partOfSpeech: "v.",
+    meaning: "通勤",
+    definition: "To travel regularly between home and work or school.",
+    example: "Many employees commute to the office by train.",
+    translation: "許多員工搭火車通勤到辦公室。",
+    collocation: "commute by train 搭火車通勤",
+  },
+  {
+    word: "commuter",
+    phonetic: "/kəˈmjuːtɚ/",
+    partOfSpeech: "n.",
+    meaning: "通勤者",
+    definition:
+      "A person who regularly travels between home and work or school.",
+    example:
+      "The new express bus service will save commuters twenty minutes each morning.",
+    translation: "新的快速公車服務將讓通勤者每天早上節省二十分鐘。",
+    collocation: "a daily commuter 每日通勤者",
+  },
+  {
+    word: "pedestrian",
+    phonetic: "/pəˈdestriən/",
+    partOfSpeech: "n.",
+    meaning: "行人",
+    definition:
+      "A person who is walking, especially on a street or near traffic.",
+    example: "Drivers must watch for pedestrians near the station entrance.",
+    translation: "駕駛在車站入口附近必須注意行人。",
+    collocation: "a pedestrian crossing 行人穿越道",
+  },
+  {
+    word: "intersection",
+    phonetic: "/ˌɪntɚˈsekʃən/",
+    partOfSpeech: "n.",
+    meaning: "十字路口；道路交會處",
+    definition: "A place where two or more roads meet or cross.",
+    example: "Turn right at the next intersection to reach the hotel.",
+    translation: "在下一個路口右轉，就能到達飯店。",
+    collocation: "a busy intersection 車流繁忙的路口",
+  },
+  {
+    word: "detour",
+    phonetic: "/ˈdiːtʊr/",
+    partOfSpeech: "n.",
+    meaning: "繞道路線；繞道",
+    definition:
+      "A different, often longer route taken to avoid a problem on the usual route.",
+    example: "Road repairs forced us to take a detour through the city center.",
+    translation: "道路維修迫使我們繞道穿越市中心。",
+    collocation: "take a detour 繞道而行",
+  },
+  {
+    word: "congestion",
+    phonetic: "/kənˈdʒestʃən/",
+    partOfSpeech: "n.",
+    meaning: "交通壅塞",
+    definition:
+      "A situation in which roads are so crowded that traffic moves slowly.",
+    example: "Leave early to avoid traffic congestion near the airport.",
+    translation: "請提早出發，以避開機場附近的交通壅塞。",
+    collocation: "traffic congestion 交通壅塞",
+  },
+  {
+    word: "highway",
+    phonetic: "/ˈhaɪweɪ/",
+    partOfSpeech: "n.",
+    meaning: "公路；主要幹道",
+    definition: "A main road used for travel between towns or cities.",
+    example:
+      "The highway between the airport and the city will reopen tonight.",
+    translation: "連接機場與市區的公路將在今晚重新開放。",
+    collocation: "a major highway 主要公路",
+  },
+  {
+    word: "expressway",
+    phonetic: "/ɪkˈspresweɪ/",
+    partOfSpeech: "n.",
+    meaning: "快速道路；高速公路",
+    definition:
+      "A wide road designed for fast traffic, with limited places to enter and exit.",
+    example:
+      "Taking the expressway is usually faster than driving through town.",
+    translation: "走快速道路通常比開車穿過市區更快。",
+    collocation: "an expressway exit 快速道路出口",
+  },
+  {
+    word: "toll",
+    phonetic: "/toʊl/",
+    partOfSpeech: "n.",
+    meaning: "道路或橋梁的通行費",
+    definition: "A fee paid to use a road, bridge, or tunnel.",
+    example: "The rental fee does not include highway tolls.",
+    translation: "租金不包含公路通行費。",
+    collocation: "pay a toll 支付通行費",
+  },
+  {
+    word: "rental",
+    phonetic: "/ˈrentəl/",
+    partOfSpeech: "n.",
+    meaning: "租用；租賃",
+    definition:
+      "An arrangement to use something for a period of time in exchange for payment.",
+    example: "Your car rental includes unlimited mileage for three days.",
+    translation: "您的租車方案包含三天不限里程的使用。",
+    collocation: "car rental 租車",
+  },
+  {
+    word: "concierge",
+    phonetic: "/ˌkɑːnsiˈerʒ/",
+    partOfSpeech: "n.",
+    meaning: "飯店禮賓人員",
+    definition:
+      "A hotel employee who helps guests with arrangements and information.",
+    example:
+      "Ask the concierge to recommend a restaurant within walking distance.",
+    translation: "請禮賓人員推薦一家步行可達的餐廳。",
+    collocation: "a hotel concierge 飯店禮賓人員",
+  },
+  {
+    word: "reception",
+    phonetic: "/rɪˈsepʃən/",
+    partOfSpeech: "n.",
+    meaning: "接待處；接待櫃台",
+    definition:
+      "The area in a hotel or office where visitors are welcomed and helped.",
+    example: "Please leave your room key at reception when you check out.",
+    translation: "退房時，請將房間鑰匙留在接待櫃台。",
+    collocation: "a reception desk 接待櫃台",
+  },
+  {
+    word: "lobby",
+    phonetic: "/ˈlɑːbi/",
+    partOfSpeech: "n.",
+    meaning: "大廳",
+    definition:
+      "A large entrance area inside a hotel or other public building.",
+    example: "The tour group will meet in the hotel lobby at eight o'clock.",
+    translation: "旅行團將於八點在飯店大廳集合。",
+    collocation: "a hotel lobby 飯店大廳",
+  },
+  {
+    word: "suite",
+    phonetic: "/swiːt/",
+    partOfSpeech: "n.",
+    meaning: "飯店套房",
+    definition: "A set of connected rooms in a hotel used together by a guest.",
+    example:
+      "The executive suite has a separate living room and a small kitchen.",
+    translation: "行政套房設有獨立客廳和小廚房。",
+    collocation: "an executive suite 行政套房",
+  },
+  {
+    word: "occupancy",
+    phonetic: "/ˈɑːkjəpənsi/",
+    partOfSpeech: "n.",
+    meaning: "入住率；使用房間的情況",
+    definition:
+      "The use of rooms or buildings, often measured as a proportion of those available.",
+    example:
+      "Hotel occupancy usually rises during the city's annual music festival.",
+    translation: "這座城市舉行年度音樂節期間，飯店入住率通常會上升。",
+    collocation: "a high occupancy rate 高入住率",
+  },
+  {
+    word: "amenity",
+    phonetic: "/əˈmenəti/",
+    partOfSpeech: "n.",
+    meaning: "便利設施；服務設施",
+    definition:
+      "A feature or service that makes a place more comfortable or convenient.",
+    example:
+      "The hotel's amenities include a gym, a pool, and free wireless internet.",
+    translation: "飯店的設施與服務包括健身房、游泳池及免費無線網路。",
+    collocation: "hotel amenities 飯店便利設施",
+  },
+  {
+    word: "housekeeping",
+    phonetic: "/ˈhaʊsˌkiːpɪŋ/",
+    partOfSpeech: "n.",
+    meaning: "客房清潔；房務",
+    definition:
+      "The work of cleaning and looking after rooms in a hotel or home.",
+    example: "Please contact housekeeping if you need extra towels.",
+    translation: "若需要額外的毛巾，請聯絡房務部。",
+    collocation: "housekeeping services 房務清潔服務",
+  },
+  {
+    word: "laundry",
+    phonetic: "/ˈlɔːndri/",
+    partOfSpeech: "n.",
+    meaning: "洗衣服務；洗衣工作",
+    definition:
+      "The work or service of washing clothes and other fabric items.",
+    example: "The hotel offers a laundry service for an additional fee.",
+    translation: "這家飯店提供需額外付費的洗衣服務。",
+    collocation: "a laundry service 洗衣服務",
+  },
+  {
+    word: "upgrade",
+    phonetic: "/ʌpˈɡreɪd/",
+    partOfSpeech: "v.",
+    meaning: "升等；升級",
+    definition: "To move someone or something to a better standard or class.",
+    example: "The hotel upgraded our room to a suite at no extra charge.",
+    translation: "飯店將我們的房間免費升等為套房。",
+    collocation: "upgrade a room 將房間升等",
+  },
+  {
+    word: "balcony",
+    phonetic: "/ˈbælkəni/",
+    partOfSpeech: "n.",
+    meaning: "陽台",
+    definition:
+      "An outdoor platform attached to the wall of a building above ground level.",
+    example: "We booked a room with a balcony overlooking the harbor.",
+    translation: "我們訂了一間附有陽台、可以俯瞰港口的房間。",
+    collocation: "a room with a balcony 附有陽台的房間",
+  },
+  {
+    word: "elevator",
+    phonetic: "/ˈeləˌveɪtɚ/",
+    partOfSpeech: "n.",
+    meaning: "電梯",
+    definition:
+      "A machine that carries people or goods between floors of a building.",
+    example:
+      "Take the elevator to the fifth floor and turn left for the conference room.",
+    translation: "搭電梯到五樓後左轉，即可到達會議室。",
+    collocation: "take the elevator 搭乘電梯",
+  },
+  {
+    word: "ferry",
+    phonetic: "/ˈferi/",
+    partOfSpeech: "n.",
+    meaning: "渡輪",
+    definition:
+      "A boat that regularly carries people or vehicles across a stretch of water.",
+    example: "The last ferry to the island leaves at six in the evening.",
+    translation: "前往島上的末班渡輪於晚上六點出發。",
+    collocation: "catch a ferry 趕搭渡輪",
+  },
+  {
+    word: "cruise",
+    phonetic: "/kruːz/",
+    partOfSpeech: "n.",
+    meaning: "郵輪旅遊；遊船行程",
+    definition:
+      "A journey by ship for pleasure, often including stops at several places.",
+    example: "The seven-day cruise includes stops at three coastal cities.",
+    translation: "這趟七天的郵輪行程會停靠三座沿海城市。",
+    collocation: "go on a cruise 搭郵輪旅遊",
+  },
+  {
+    word: "pier",
+    phonetic: "/pɪr/",
+    partOfSpeech: "n.",
+    meaning: "碼頭；突堤",
+    definition:
+      "A structure extending from the shore into water where boats can stop or people can walk.",
+    example:
+      "Passengers should gather at the pier fifteen minutes before boarding the boat.",
+    translation: "乘客應於上船前十五分鐘在碼頭集合。",
+    collocation: "a ferry pier 渡輪碼頭",
+  },
+  {
+    word: "port",
+    phonetic: "/pɔːrt/",
+    partOfSpeech: "n.",
+    meaning: "港口",
+    definition:
+      "A place where ships arrive and leave and where passengers or goods are handled.",
+    example: "The cruise ship will remain in port until tomorrow morning.",
+    translation: "這艘郵輪將停留在港內直到明天早上。",
+    collocation: "a busy port 繁忙的港口",
+  },
+  {
+    word: "overnight",
+    phonetic: "/ˌoʊvɚˈnaɪt/",
+    partOfSpeech: "adv.",
+    meaning: "過夜；在夜間",
+    definition: "For or during the night.",
+    example:
+      "We decided to stay overnight near the airport before our early flight.",
+    translation: "由於航班時間很早，我們決定先在機場附近過夜。",
+    collocation: "stay overnight 留宿一晚",
+  },
+  {
+    word: "punctual",
+    phonetic: "/ˈpʌŋktʃuəl/",
+    partOfSpeech: "adj.",
+    meaning: "準時的",
+    definition: "Arriving or happening at the agreed or expected time.",
+    example:
+      "Please be punctual, as the tour bus cannot wait for late arrivals.",
+    translation: "請準時抵達，因為遊覽車無法等候遲到的旅客。",
+    collocation: "be punctual for a meeting 準時出席會議",
+  },
+  {
+    word: "disruption",
+    phonetic: "/dɪsˈrʌpʃən/",
+    partOfSpeech: "n.",
+    meaning: "中斷；干擾",
+    definition:
+      "A problem that prevents an activity or service from continuing normally.",
+    example:
+      "Passengers should check for service disruptions before leaving for the station.",
+    translation: "乘客前往車站之前，應確認是否有服務中斷的情況。",
+    collocation: "a service disruption 服務中斷",
+  },
+];
+
+export const travelAdditions: Word[] = entries.map((entry) => ({
+  id: `travel-${entry.word}`,
+  ...entry,
+  category: "travel",
+  level: "700 分目標詞彙",
+}));
