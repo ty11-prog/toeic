@@ -1,4 +1,4 @@
-import type { Word } from "../data";
+import type { WordEntry } from "../data";
 
 const entry = (
   word: string,
@@ -9,7 +9,7 @@ const entry = (
   example: string,
   translation: string,
   collocation: string,
-): Word => ({
+): WordEntry => ({
   id: `work-${word}`,
   word,
   phonetic,
@@ -20,11 +20,10 @@ const entry = (
   translation,
   category: "work",
   collocation,
-  level: "700 分目標詞彙",
 });
 
 // Editorial study targets, not official TOEIC vocabulary classifications.
-export const workAdditions: Word[] = [
+export const workAdditions: WordEntry[] = [
   entry(
     "applicant",
     "/ˈæpləkənt/",

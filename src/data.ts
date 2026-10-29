@@ -2,8 +2,19 @@ import { workAdditions } from "./content/work-additions.ts";
 import { travelAdditions } from "./content/travel-additions.ts";
 import { businessAdditions } from "./content/business-additions.ts";
 import { dailyAdditions } from "./content/daily-additions.ts";
+import { workAdvanced } from "./content/work-advanced.ts";
+import { travelAdvanced } from "./content/travel-advanced.ts";
+import { businessAdvanced } from "./content/business-advanced.ts";
+import { dailyAdvanced } from "./content/daily-advanced.ts";
+import {
+  difficultyByWordId,
+  vocabularyTiers,
+} from "./content/vocabulary-tiers.ts";
+import type { VocabularyDifficulty } from "./content/vocabulary-tiers.ts";
+export { vocabularyTiers } from "./content/vocabulary-tiers.ts";
+export type { VocabularyDifficulty } from "./content/vocabulary-tiers.ts";
 
-export type Word = {
+export type WordEntry = {
   id: string;
   word: string;
   phonetic: string;
@@ -14,10 +25,13 @@ export type Word = {
   translation: string;
   category: "work" | "travel" | "business" | "daily";
   collocation: string;
+};
+export type Word = WordEntry & {
+  difficulty: VocabularyDifficulty;
   level: string;
 };
 
-const originalWords: Word[] = [
+const originalWords: WordEntry[] = [
   {
     id: "work-deadline",
     word: "deadline",
@@ -29,7 +43,6 @@ const originalWords: Word[] = [
     translation: "我們必須在期限內完成季度報告。",
     category: "work",
     collocation: "meet a deadline 在期限內完成",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-collaborate",
@@ -42,7 +55,6 @@ const originalWords: Word[] = [
     translation: "我們的設計團隊將與行銷部門合作。",
     category: "work",
     collocation: "collaborate with a team 與團隊合作",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-efficient",
@@ -55,7 +67,6 @@ const originalWords: Word[] = [
     translation: "新軟體讓我們的訂購流程更有效率。",
     category: "work",
     collocation: "an efficient process 有效率的流程",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-assignment",
@@ -69,7 +80,6 @@ const originalWords: Word[] = [
     translation: "她的第一項任務是整理顧客回饋摘要。",
     category: "work",
     collocation: "complete an assignment 完成任務",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-prioritize",
@@ -84,7 +94,6 @@ const originalWords: Word[] = [
     translation: "請優先處理那些交貨延遲的顧客所提出的請求。",
     category: "work",
     collocation: "prioritize tasks 安排任務的優先順序",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-reschedule",
@@ -97,7 +106,6 @@ const originalWords: Word[] = [
     translation: "經理將面試改到星期四上午。",
     category: "work",
     collocation: "reschedule a meeting 重新安排會議時間",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-qualified",
@@ -111,7 +119,6 @@ const originalWords: Word[] = [
     translation: "我們正在尋找具備銷售經驗的合格人選。",
     category: "work",
     collocation: "be qualified for a position 符合職位資格",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-initiative",
@@ -126,7 +133,6 @@ const originalWords: Word[] = [
     translation: "她主動為新進員工安排了一場訓練課程。",
     category: "work",
     collocation: "take the initiative 主動採取行動",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-itinerary",
@@ -139,7 +145,6 @@ const originalWords: Word[] = [
     translation: "詳細行程表將以電子郵件寄給所有參團旅客。",
     category: "travel",
     collocation: "a detailed itinerary 詳細行程表",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-accommodation",
@@ -153,7 +158,6 @@ const originalWords: Word[] = [
     translation: "報名費包含餐點，但不包含住宿。",
     category: "travel",
     collocation: "book accommodation 預訂住宿",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-departure",
@@ -168,7 +172,6 @@ const originalWords: Word[] = [
     translation: "旅客應在起飛前三十分鐘抵達登機門。",
     category: "travel",
     collocation: "departure time 出發時間",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-reservation",
@@ -182,7 +185,6 @@ const originalWords: Word[] = [
     translation: "請至少提前兩天確認您的飯店訂房。",
     category: "travel",
     collocation: "make a reservation 預訂",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-complimentary",
@@ -196,7 +198,6 @@ const originalWords: Word[] = [
     translation: "住客可在飯店餐廳享用免費早餐。",
     category: "travel",
     collocation: "complimentary breakfast 免費早餐",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-convenient",
@@ -210,7 +211,6 @@ const originalWords: Word[] = [
     translation: "這間飯店位於中央車站附近，地點便利。",
     category: "travel",
     collocation: "a convenient location 便利的地點",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-reimburse",
@@ -224,7 +224,6 @@ const originalWords: Word[] = [
     translation: "公司將報銷員工經核准的差旅費用。",
     category: "travel",
     collocation: "reimburse someone for expenses 報銷某人的費用",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-destination",
@@ -238,7 +237,6 @@ const originalWords: Word[] = [
     translation: "這座島已成為企業團隊移地研習的熱門目的地。",
     category: "travel",
     collocation: "reach a destination 抵達目的地",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-revenue",
@@ -252,7 +250,6 @@ const originalWords: Word[] = [
     translation: "線上銷售幾乎占公司年營收的一半。",
     category: "business",
     collocation: "annual revenue 年營收",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-negotiate",
@@ -266,7 +263,6 @@ const originalWords: Word[] = [
     translation: "採購團隊正在與供應商協商更低的價格。",
     category: "business",
     collocation: "negotiate a contract 協商合約",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-invoice",
@@ -280,7 +276,6 @@ const originalWords: Word[] = [
     translation: "款項應於請款單開立日起三十天內付清。",
     category: "business",
     collocation: "issue an invoice 開立請款單",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-purchase",
@@ -294,7 +289,6 @@ const originalWords: Word[] = [
     translation: "顧客可以直接從我們的網站購買替換零件。",
     category: "business",
     collocation: "purchase equipment 購買設備",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-supplier",
@@ -307,7 +301,6 @@ const originalWords: Word[] = [
     translation: "我們選擇了當地供應商，以縮短交貨時間。",
     category: "business",
     collocation: "a reliable supplier 可靠的供應商",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-expansion",
@@ -321,7 +314,6 @@ const originalWords: Word[] = [
     translation: "公司拓展海外市場，創造了數個新職缺。",
     category: "business",
     collocation: "business expansion 業務擴張",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-competitive",
@@ -335,7 +327,6 @@ const originalWords: Word[] = [
     translation: "這家零售商以有競爭力的價格販售辦公用品。",
     category: "business",
     collocation: "competitive prices 有競爭力的價格",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-guarantee",
@@ -349,7 +340,6 @@ const originalWords: Word[] = [
     translation: "我們保證在三個工作天內送達。",
     category: "business",
     collocation: "guarantee delivery 保證交貨",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-perspective",
@@ -363,7 +353,6 @@ const originalWords: Word[] = [
     translation: "學習另一種語言，幫助我們以不同的觀點看世界。",
     category: "daily",
     collocation: "from a different perspective 從不同的觀點",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-maintain",
@@ -376,7 +365,6 @@ const originalWords: Word[] = [
     translation: "規律練習能幫助你維持語言能力。",
     category: "daily",
     collocation: "maintain a routine 維持固定作息",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-available",
@@ -390,7 +378,6 @@ const originalWords: Word[] = [
     translation: "社區中心網站上提供更多資訊。",
     category: "daily",
     collocation: "be available online 可在線上取得",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-recommend",
@@ -405,7 +392,6 @@ const originalWords: Word[] = [
     translation: "老師建議在睡前複習新單字。",
     category: "daily",
     collocation: "recommend doing something 建議做某事",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-considerable",
@@ -418,7 +404,6 @@ const originalWords: Word[] = [
     translation: "在家準備餐點可以省下可觀的費用。",
     category: "daily",
     collocation: "considerable progress 相當大的進步",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-alternative",
@@ -431,7 +416,6 @@ const originalWords: Word[] = [
     translation: "搭公車是開車以外經濟實惠的選擇。",
     category: "daily",
     collocation: "an alternative to something 某事物的替代方案",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-beneficial",
@@ -445,7 +429,6 @@ const originalWords: Word[] = [
     translation: "午餐後短暫散步有助於專注力。",
     category: "daily",
     collocation: "be beneficial to something 對某事物有益",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-consistent",
@@ -460,7 +443,6 @@ const originalWords: Word[] = [
       "持續穩定的努力，比每個月只集中讀一次、一次讀好幾個小時更有幫助。",
     category: "daily",
     collocation: "consistent effort 持續穩定的努力",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-agenda",
@@ -473,7 +455,6 @@ const originalWords: Word[] = [
     translation: "請在明天的團隊會議前先查看議程。",
     category: "work",
     collocation: "on the agenda 在議程中",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-colleague",
@@ -488,7 +469,6 @@ const originalWords: Word[] = [
     translation: "寄出報告前，我請一位同事檢查數據。",
     category: "work",
     collocation: "a former colleague 前同事",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-accomplish",
@@ -502,7 +482,6 @@ const originalWords: Word[] = [
     translation: "透過明確的計畫，團隊達成了當月所有目標。",
     category: "work",
     collocation: "accomplish a goal 達成目標",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-delegate",
@@ -515,7 +494,6 @@ const originalWords: Word[] = [
     translation: "經理將例行工作委派給有經驗的團隊成員。",
     category: "work",
     collocation: "delegate tasks to someone 將任務委派給某人",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-supervise",
@@ -529,7 +507,6 @@ const originalWords: Word[] = [
     translation: "一位資深技術人員將監督設備的安裝作業。",
     category: "work",
     collocation: "supervise a project 監督專案",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-recruit",
@@ -543,7 +520,6 @@ const originalWords: Word[] = [
     translation: "這家公司計畫在年底前招募十位工程師。",
     category: "work",
     collocation: "recruit new employees 招募新員工",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-orientation",
@@ -557,7 +533,6 @@ const originalWords: Word[] = [
     translation: "新員工會在到職第一天參加新進人員訓練。",
     category: "work",
     collocation: "an orientation session 新進人員訓練課程",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-attendance",
@@ -572,7 +547,6 @@ const originalWords: Word[] = [
     translation: "所有倉庫員工都必須出席安全講習。",
     category: "work",
     collocation: "confirm your attendance 確認出席",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-promotion",
@@ -587,7 +561,6 @@ const originalWords: Word[] = [
     translation: "出色的領導能力讓她升任區域經理。",
     category: "work",
     collocation: "receive a promotion 獲得升遷",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-performance",
@@ -600,7 +573,6 @@ const originalWords: Word[] = [
     translation: "主管每年評估每位員工的工作表現兩次。",
     category: "work",
     collocation: "a performance review 績效考核",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-procedure",
@@ -614,7 +586,6 @@ const originalWords: Word[] = [
     translation: "回報技術問題時，請遵循標準程序。",
     category: "work",
     collocation: "follow a procedure 遵循程序",
-    level: "700 分目標詞彙",
   },
   {
     id: "work-confidential",
@@ -629,7 +600,6 @@ const originalWords: Word[] = [
     translation: "員工必須對所有顧客帳戶資料保密。",
     category: "work",
     collocation: "confidential information 機密資訊",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-boarding",
@@ -643,7 +613,6 @@ const originalWords: Word[] = [
     translation: "218 號班機將在十分鐘後於 6 號登機門開始登機。",
     category: "travel",
     collocation: "a boarding pass 登機證",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-baggage",
@@ -656,7 +625,6 @@ const originalWords: Word[] = [
     translation: "每位旅客可免費托運一件行李。",
     category: "travel",
     collocation: "checked baggage 托運行李",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-cancellation",
@@ -671,7 +639,6 @@ const originalWords: Word[] = [
     translation: "若至少提前 48 小時通知我們，就不收取消費用。",
     category: "travel",
     collocation: "a cancellation fee 取消費用",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-confirm",
@@ -684,7 +651,6 @@ const originalWords: Word[] = [
     translation: "請致電飯店確認您的抵達時間。",
     category: "travel",
     collocation: "confirm a booking 確認預訂",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-transfer",
@@ -698,7 +664,6 @@ const originalWords: Word[] = [
     translation: "您需要在中央車站轉乘快車。",
     category: "travel",
     collocation: "transfer to another train 轉乘另一班火車",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-transit",
@@ -712,7 +677,6 @@ const originalWords: Word[] = [
     translation: "這座城市的大眾運輸系統讓前往機場十分方便。",
     category: "travel",
     collocation: "public transit 大眾運輸",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-fare",
@@ -726,7 +690,6 @@ const originalWords: Word[] = [
     translation: "火車票價包含劃位費。",
     category: "travel",
     collocation: "a round-trip fare 來回票價",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-surcharge",
@@ -739,7 +702,6 @@ const originalWords: Word[] = [
     translation: "機票總價將加上燃油附加費。",
     category: "travel",
     collocation: "a fuel surcharge 燃油附加費",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-refundable",
@@ -753,7 +715,6 @@ const originalWords: Word[] = [
     translation: "以優惠價格購買的票券不得退款。",
     category: "travel",
     collocation: "a refundable deposit 可退還的押金",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-vacancy",
@@ -767,7 +728,6 @@ const originalWords: Word[] = [
     translation: "接待人員查看飯店週末是否還有空房。",
     category: "travel",
     collocation: "no vacancies 無空房",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-shuttle",
@@ -782,7 +742,6 @@ const originalWords: Word[] = [
     translation: "機場與飯店之間每半小時有一班免費接駁車。",
     category: "travel",
     collocation: "an airport shuttle 機場接駁車",
-    level: "700 分目標詞彙",
   },
   {
     id: "travel-customs",
@@ -797,7 +756,6 @@ const originalWords: Word[] = [
     translation: "旅客通關時必須申報某些食品。",
     category: "travel",
     collocation: "go through customs 通過海關",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-budget",
@@ -812,7 +770,6 @@ const originalWords: Word[] = [
     translation: "這次廣告活動在核准的預算內完成。",
     category: "business",
     collocation: "within budget 在預算內",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-estimate",
@@ -826,7 +783,6 @@ const originalWords: Word[] = [
     translation: "承包商提供了辦公室修繕的書面估價。",
     category: "business",
     collocation: "a cost estimate 費用估計",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-proposal",
@@ -840,7 +796,6 @@ const originalWords: Word[] = [
     translation: "客戶接受了我們重新設計其網路商店的提案。",
     category: "business",
     collocation: "submit a proposal 提交提案",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-contract",
@@ -854,7 +809,6 @@ const originalWords: Word[] = [
     translation: "雙方審閱條款後簽署了合約。",
     category: "business",
     collocation: "sign a contract 簽署合約",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-merchandise",
@@ -868,7 +822,6 @@ const originalWords: Word[] = [
     translation: "受損商品可於購買後十四天內退回。",
     category: "business",
     collocation: "return merchandise 退回商品",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-inventory",
@@ -882,7 +835,6 @@ const originalWords: Word[] = [
     translation: "倉庫團隊每週五檢查庫存量。",
     category: "business",
     collocation: "inventory levels 庫存量",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-shipment",
@@ -897,7 +849,6 @@ const originalWords: Word[] = [
     translation: "這批替換零件預計星期二送達。",
     category: "business",
     collocation: "track a shipment 追蹤貨件",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-retailer",
@@ -910,7 +861,6 @@ const originalWords: Word[] = [
     translation: "這家製造商向大型零售商供應電子裝置。",
     category: "business",
     collocation: "an online retailer 網路零售商",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-wholesale",
@@ -925,7 +875,6 @@ const originalWords: Word[] = [
     translation: "訂購一百件以上可享批發價格。",
     category: "business",
     collocation: "wholesale prices 批發價格",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-profit",
@@ -939,7 +888,6 @@ const originalWords: Word[] = [
     translation: "降低包裝成本幫助公司增加了利潤。",
     category: "business",
     collocation: "make a profit 獲利",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-discount",
@@ -953,7 +901,6 @@ const originalWords: Word[] = [
     translation: "顧客首次線上訂購可享九折優惠。",
     category: "business",
     collocation: "offer a discount 提供折扣",
-    level: "700 分目標詞彙",
   },
   {
     id: "business-transaction",
@@ -968,7 +915,6 @@ const originalWords: Word[] = [
     translation: "交易完成後，您會收到電子郵件確認函。",
     category: "business",
     collocation: "complete a transaction 完成交易",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-appointment",
@@ -983,7 +929,6 @@ const originalWords: Word[] = [
     translation: "請在與醫師預約的時間前十分鐘抵達。",
     category: "daily",
     collocation: "make an appointment 預約",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-appliance",
@@ -998,7 +943,6 @@ const originalWords: Word[] = [
     translation: "節能家電有助於降低每月電費。",
     category: "daily",
     collocation: "household appliances 家用電器",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-subscription",
@@ -1013,7 +957,6 @@ const originalWords: Word[] = [
     translation: "您的雜誌訂閱包含所有線上文章的閱讀權限。",
     category: "daily",
     collocation: "an annual subscription 年度訂閱",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-renewal",
@@ -1028,7 +971,6 @@ const originalWords: Word[] = [
     translation: "會員資格到期前一個月會寄送續約通知。",
     category: "daily",
     collocation: "membership renewal 會員續約",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-receipt",
@@ -1042,7 +984,6 @@ const originalWords: Word[] = [
     translation: "若要換貨，請攜帶原始收據。",
     category: "daily",
     collocation: "keep a receipt 保留收據",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-eligible",
@@ -1056,7 +997,6 @@ const originalWords: Word[] = [
     translation: "學生符合資格，可享博物館優惠票價。",
     category: "daily",
     collocation: "be eligible for a discount 符合折扣資格",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-requirement",
@@ -1069,7 +1009,6 @@ const originalWords: Word[] = [
     translation: "申辦圖書館帳戶必須出示有效的附照片身分證件。",
     category: "daily",
     collocation: "meet a requirement 符合要求",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-notify",
@@ -1083,7 +1022,6 @@ const originalWords: Word[] = [
     translation: "如果發現房間有任何損壞，請通知櫃檯。",
     category: "daily",
     collocation: "notify someone of a change 通知某人有變更",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-participate",
@@ -1097,7 +1035,6 @@ const originalWords: Word[] = [
     translation: "鼓勵居民參加社區清潔活動。",
     category: "daily",
     collocation: "participate in an event 參與活動",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-accessible",
@@ -1111,7 +1048,6 @@ const originalWords: Word[] = [
     translation: "輪椅使用者可以無障礙地使用新的社區中心。",
     category: "daily",
     collocation: "accessible to everyone 所有人皆可使用的",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-essential",
@@ -1125,7 +1061,6 @@ const originalWords: Word[] = [
     translation: "穩定的網路連線是上這門線上課程的必要條件。",
     category: "daily",
     collocation: "be essential for something 對某事物不可或缺",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-approximately",
@@ -1138,7 +1073,6 @@ const originalWords: Word[] = [
     translation: "導覽行程大約持續九十分鐘。",
     category: "daily",
     collocation: "approximately one hour 大約一小時",
-    level: "700 分目標詞彙",
   },
 ];
 
@@ -1148,7 +1082,16 @@ export const words: Word[] = [
   ...travelAdditions,
   ...businessAdditions,
   ...dailyAdditions,
-];
+  ...workAdvanced,
+  ...travelAdvanced,
+  ...businessAdvanced,
+  ...dailyAdvanced,
+].map((entry) => {
+  const difficulty = difficultyByWordId[entry.id];
+  const tier = vocabularyTiers.find((item) => item.id === difficulty);
+  if (!tier) throw new Error(`Missing vocabulary difficulty: ${entry.id}`);
+  return { ...entry, difficulty, level: tier.label };
+});
 
 export type GrammarLesson = {
   id: string;

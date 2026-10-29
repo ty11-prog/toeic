@@ -1,7 +1,7 @@
-import type { Word } from "../data";
+import type { WordEntry } from "../data";
 
 // Original examples; the displayed level is an editorial learning target.
-const entries: Omit<Word, "id" | "category" | "level">[] = [
+const entries: Omit<WordEntry, "id" | "category">[] = [
   {
     word: "arrival",
     phonetic: "/əˈraɪvəl/",
@@ -670,9 +670,8 @@ const entries: Omit<Word, "id" | "category" | "level">[] = [
   },
 ];
 
-export const travelAdditions: Word[] = entries.map((entry) => ({
+export const travelAdditions: WordEntry[] = entries.map((entry) => ({
   id: `travel-${entry.word}`,
   ...entry,
   category: "travel",
-  level: "700 分目標詞彙",
 }));

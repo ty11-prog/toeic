@@ -37,8 +37,14 @@ import {
 import LearningJournal from "./LearningJournal";
 import SpeechSettingsPanel from "./SpeechSettings";
 import { useSpeech } from "./useSpeech";
-import { words, grammarLessons, questions } from "./data";
-import type { Word, GrammarLesson, Question } from "./data";
+import { words, grammarLessons, questions, vocabularyTiers } from "./data";
+import type {
+  Word,
+  GrammarLesson,
+  Question,
+  VocabularyDifficulty,
+} from "./data";
+import { buildDailyStudyList } from "./vocabularyPlan";
 import { loadProgress, localDate, streak } from "./progress";
 import type { Progress } from "./progress";
 
@@ -109,7 +115,7 @@ function ReadAloudButton({
   text,
   label,
   speech,
-  caption = "聽例句",
+  caption = "朗讀",
 }: {
   text: string;
   label: string;
@@ -318,6 +324,9 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [progress, setProgress] = useState<Progress>(loadProgress);
   const [category, setCategory] = useState<Category>("all");
+  const [difficulty, setDifficulty] = useState<VocabularyDifficulty | "all">(
+    "all",
+  );
   const [search, setSearch] = useState("");
   const [wordPage, setWordPage] = useState(1);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -351,7 +360,7 @@ export default function App() {
 
   useEffect(() => {
     setWordPage(1);
-  }, [page, category, search]);
+  }, [page, category, difficulty, search]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setToday(localDate()), 60000);
@@ -373,6 +382,7 @@ export default function App() {
   const dailyCount = progress.activity[today] || 0;
   const dailyPercent = Math.min(100, dailyCount * 10);
   const todayWord = words[Math.floor(Date.now() / 86400000) % words.length];
+  const dailyWords = buildDailyStudyList(words, progress.learned, 10, today);
   const accuracy = progress.quizResults.length
     ? Math.round(
         (progress.quizResults.reduce((sum, q) => sum + q.score, 0) /
@@ -491,6 +501,7 @@ export default function App() {
     (word) =>
       (page !== "saved" || progress.saved.includes(word.id)) &&
       (category === "all" || word.category === category) &&
+      (difficulty === "all" || word.difficulty === difficulty) &&
       `${word.word} ${word.meaning} ${word.collocation}`
         .toLowerCase()
         .includes(search.toLowerCase().trim()),
@@ -547,6 +558,7 @@ export default function App() {
             key={item.id}
             onClick={() => {
               setCategory(item.id);
+              setDifficulty("all");
               navigate("vocabulary");
             }}
           >
@@ -557,7 +569,7 @@ export default function App() {
               <span className="art-line line-one" />
               <span className="art-line line-two" />
               <span className="art-spark">✦</span>
-              <span className="card-level">TOEIC 600–750</span>
+              <span className="card-level">600–990 混合選材</span>
             </div>
             <div className="category-copy">
               <span className="eyebrow">{item.english}</span>
@@ -618,7 +630,10 @@ export default function App() {
               key={id}
               className={`nav-item ${page === id ? "active" : ""}`}
               onClick={() => {
-                if (id === "vocabulary" || id === "saved") setCategory("all");
+                if (id === "vocabulary" || id === "saved") {
+                  setCategory("all");
+                  setDifficulty("all");
+                }
                 navigate(id);
               }}
               aria-current={page === id ? "page" : undefined}
@@ -655,7 +670,7 @@ export default function App() {
           <span className="avatar">Y</span>
           <span>
             <strong>你的學習旅程</strong>
-            <small>目標 TOEIC 700</small>
+            <small>目前約 700 · 目標 800+</small>
           </span>
           <span className="status-dot" title="進度儲存於本機" />
         </div>
@@ -704,7 +719,7 @@ export default function App() {
                   <p>不用一次學很多，今天也一起累積一點進步吧。</p>
                 </div>
                 <span className="goal-badge">
-                  <Target size={16} /> 目標分數 <strong>TOEIC 700</strong>
+                  <Target size={16} /> 目標分數 <strong>TOEIC 800+</strong>
                 </span>
               </div>
               <div className="feature-grid">
@@ -724,21 +739,7 @@ export default function App() {
                     </p>
                     <button
                       className="button primary"
-                      onClick={() =>
-                        openStudy(
-                          words
-                            .filter(
-                              (word) => !progress.learned.includes(word.id),
-                            )
-                            .slice(0, 10).length
-                            ? words
-                                .filter(
-                                  (word) => !progress.learned.includes(word.id),
-                                )
-                                .slice(0, 10)
-                            : words.slice(0, 10),
-                        )
-                      }
+                      onClick={() => openStudy(dailyWords)}
                     >
                       開始今日學習 <ArrowRight size={17} />
                     </button>
@@ -788,6 +789,11 @@ export default function App() {
                   </div>
                   <div className="daily-meaning">
                     <span>{todayWord.partOfSpeech}</span> {todayWord.meaning}
+                    <small
+                      className={`daily-word-level ${todayWord.difficulty}`}
+                    >
+                      {todayWord.level}
+                    </small>
                   </div>
                   <div className="daily-example-block">
                     <p className="daily-example" lang="en">
@@ -807,6 +813,37 @@ export default function App() {
                   </button>
                 </section>
               </div>
+              <section className="learning-route" aria-label="800 分學習路線">
+                <div className="learning-route-intro">
+                  <Target size={19} />
+                  <div>
+                    <h2>從約 700，穩穩走向 800+</h2>
+                    <p>
+                      先補足常用字，再拉高閱讀上限。每日混合練習以 3 個基礎、5
+                      個核心、2 個進階字為原則。
+                    </p>
+                  </div>
+                </div>
+                <div className="learning-route-tiers">
+                  {vocabularyTiers.map((tier) => (
+                    <button
+                      key={tier.id}
+                      onClick={() => {
+                        setCategory("all");
+                        setDifficulty(tier.id);
+                        navigate("vocabulary");
+                      }}
+                    >
+                      <span>{tier.label}</span>
+                      <small>
+                        {tier.range}
+                        <span> 練習帶</span>
+                      </small>
+                      <ArrowRight size={14} />
+                    </button>
+                  ))}
+                </div>
+              </section>
               <section className="stats-strip" aria-label="學習統計">
                 <div className="daily-goal-stat">
                   <span className="stat-icon sage">
@@ -873,6 +910,7 @@ export default function App() {
                     className="text-button"
                     onClick={() => {
                       setCategory("all");
+                      setDifficulty("all");
                       navigate(homeTab);
                     }}
                   >
@@ -935,7 +973,7 @@ export default function App() {
                 subtitle={
                   page === "saved"
                     ? "收藏容易忘記、也想再遇見的字，慢慢變成自己的。"
-                    : "為 TOEIC 600–750 程度準備，從真實情境建立英文語感。"
+                    : "涵蓋 600–990 選材範圍：補足常用字、突破 800+，也接觸高分閱讀的精確用語。"
                 }
               />
               <div className="vocab-toolbar">
@@ -982,6 +1020,39 @@ export default function App() {
                 <span className="filter-note">
                   點選單字，深入學習 <ArrowDown size={13} />
                 </span>
+              </div>
+              <div
+                className="difficulty-filters"
+                role="group"
+                aria-label="單字難度"
+              >
+                <span className="difficulty-label">學習範圍</span>
+                <button
+                  className={
+                    difficulty === "all"
+                      ? "difficulty-chip active"
+                      : "difficulty-chip"
+                  }
+                  aria-pressed={difficulty === "all"}
+                  onClick={() => setDifficulty("all")}
+                >
+                  混合程度 <span>600–990</span>
+                </button>
+                {vocabularyTiers.map((tier) => (
+                  <button
+                    key={tier.id}
+                    className={
+                      difficulty === tier.id
+                        ? `difficulty-chip active ${tier.id}`
+                        : `difficulty-chip ${tier.id}`
+                    }
+                    aria-pressed={difficulty === tier.id}
+                    onClick={() => setDifficulty(tier.id)}
+                  >
+                    {tier.label}
+                    <span>{tier.range}</span>
+                  </button>
+                ))}
               </div>
               {visibleWords.length ? (
                 <div className="word-grid">
@@ -1050,12 +1121,12 @@ export default function App() {
                 <div className="empty-state">
                   <Bookmark size={38} strokeWidth={1.2} />
                   <h2>
-                    {search || category !== "all"
+                    {search || category !== "all" || difficulty !== "all"
                       ? "還沒找到這個單字"
                       : "給想記住的單字，一個位置。"}
                   </h2>
                   <p>
-                    {search || category !== "all"
+                    {search || category !== "all" || difficulty !== "all"
                       ? "試著搜尋其他英文單字、中文意思，或切換情境分類。"
                       : "在單字旁按下書籤，就能在這裡找到它。"}
                   </p>
@@ -1064,6 +1135,7 @@ export default function App() {
                     onClick={() => {
                       setSearch("");
                       setCategory("all");
+                      setDifficulty("all");
                       if (page === "saved" && !progress.saved.length)
                         navigate("vocabulary");
                     }}
@@ -1092,8 +1164,8 @@ export default function App() {
                 </div>
               )}
               <p className="vocabulary-level-note">
-                「700 分目標詞彙」為本站依學習情境選材的標示，並非 TOEIC
-                官方單字分級。
+                分組與分數練習帶為本站的編輯選材建議，並非 TOEIC
+                官方逐字分級；可依熟悉度混合練習。
               </p>
             </>
           )}
@@ -1299,7 +1371,7 @@ export default function App() {
                           quizSet[quizIndex].options[quizSet[quizIndex].answer],
                         )}
                         label="朗讀完整句子"
-                        caption="聽完整句"
+                        caption="朗讀完整句子"
                         speech={speech}
                       />
                     </div>
@@ -1383,7 +1455,10 @@ export default function App() {
               className={page === id ? "active" : ""}
               aria-current={page === id ? "page" : undefined}
               onClick={() => {
-                if (id === "vocabulary") setCategory("all");
+                if (id === "vocabulary") {
+                  setCategory("all");
+                  setDifficulty("all");
+                }
                 navigate(id);
               }}
             >
@@ -1495,13 +1570,25 @@ export default function App() {
                 />
               </div>
               <div className="study-word">
-                <span className="word-category sage">
-                  {
-                    categories.find(
-                      (item) => item.id === studyWords[studyIndex].category,
-                    )?.title
-                  }
-                </span>
+                <div className="study-word-tags">
+                  <span className="word-category sage">
+                    {
+                      categories.find(
+                        (item) => item.id === studyWords[studyIndex].category,
+                      )?.title
+                    }
+                  </span>
+                  <span
+                    className={`study-difficulty ${studyWords[studyIndex].difficulty}`}
+                  >
+                    {studyWords[studyIndex].level} ·{" "}
+                    {
+                      vocabularyTiers.find(
+                        (tier) => tier.id === studyWords[studyIndex].difficulty,
+                      )?.range
+                    }
+                  </span>
+                </div>
                 <h2>{studyWords[studyIndex].word}</h2>
                 <div className="pronunciation">
                   <span>{studyWords[studyIndex].phonetic}</span>

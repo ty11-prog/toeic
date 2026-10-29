@@ -1,6 +1,6 @@
-import type { Word } from "../data";
+import type { WordEntry } from "../data";
 
-export const dailyAdditions: Word[] = [
+export const dailyAdditions: WordEntry[] = [
   {
     id: "daily-household",
     word: "household",
@@ -12,7 +12,6 @@ export const dailyAdditions: Word[] = [
     translation: "下個月每戶家庭都會收到一個新的資源回收桶。",
     category: "daily",
     collocation: "a household survey 家庭調查",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-tenant",
@@ -26,7 +25,6 @@ export const dailyAdditions: Word[] = [
     translation: "房客養寵物前必須通知房東。",
     category: "daily",
     collocation: "a new tenant 新房客",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-landlord",
@@ -40,7 +38,6 @@ export const dailyAdditions: Word[] = [
     translation: "如果暖氣故障，請聯絡房東。",
     category: "daily",
     collocation: "contact the landlord 聯絡房東",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-lease",
@@ -54,7 +51,6 @@ export const dailyAdditions: Word[] = [
     translation: "我們的公寓租約在九月底到期。",
     category: "daily",
     collocation: "sign a lease 簽訂租約",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-utility",
@@ -69,7 +65,6 @@ export const dailyAdditions: Word[] = [
     translation: "房租不包含電費與水費等公用事業費用。",
     category: "daily",
     collocation: "utility bills 水電瓦斯等費用帳單",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-plumbing",
@@ -84,7 +79,6 @@ export const dailyAdditions: Word[] = [
     translation: "餐廳將休業兩天，以修繕給排水管線。",
     category: "daily",
     collocation: "a plumbing problem 水管問題",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-renovation",
@@ -97,7 +91,6 @@ export const dailyAdditions: Word[] = [
     translation: "圖書館將在整修完成後重新開放。",
     category: "daily",
     collocation: "undergo renovation 進行整修",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-installation",
@@ -111,7 +104,6 @@ export const dailyAdditions: Word[] = [
     translation: "洗碗機的價格包含運送與安裝。",
     category: "daily",
     collocation: "free installation 免費安裝",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-warranty",
@@ -125,7 +117,6 @@ export const dailyAdditions: Word[] = [
     translation: "這台冰箱附有三年保固。",
     category: "daily",
     collocation: "under warranty 在保固期內",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-replacement",
@@ -138,7 +129,6 @@ export const dailyAdditions: Word[] = [
     translation: "商店寄來了一盞燈，替換原先損壞的那盞。",
     category: "daily",
     collocation: "a replacement part 替換零件",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-defective",
@@ -152,7 +142,6 @@ export const dailyAdditions: Word[] = [
     translation: "顧客可在三十天內退回有瑕疵的商品。",
     category: "daily",
     collocation: "a defective product 有瑕疵的產品",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-durable",
@@ -166,7 +155,6 @@ export const dailyAdditions: Word[] = [
     translation: "這些椅子以適合戶外使用的耐用材料製成。",
     category: "daily",
     collocation: "durable materials 耐用材料",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-disposal",
@@ -181,7 +169,6 @@ export const dailyAdditions: Word[] = [
     translation: "市政府提供專用容器，供民眾安全丟棄電池。",
     category: "daily",
     collocation: "waste disposal 廢棄物處理",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-recycle",
@@ -194,7 +181,6 @@ export const dailyAdditions: Word[] = [
     translation: "請將玻璃瓶放進外面的綠色回收容器。",
     category: "daily",
     collocation: "recycle paper 回收廢紙",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-packaging",
@@ -208,7 +194,6 @@ export const dailyAdditions: Word[] = [
     translation: "這家公司已減少包裝材料中的塑膠用量。",
     category: "daily",
     collocation: "recyclable packaging 可回收的包裝材料",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-consumption",
@@ -222,7 +207,6 @@ export const dailyAdditions: Word[] = [
     translation: "更換老舊燈泡可以降低家庭能源消耗量。",
     category: "daily",
     collocation: "energy consumption 能源消耗量",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-reusable",
@@ -235,7 +219,6 @@ export const dailyAdditions: Word[] = [
     translation: "自備可重複使用杯子的顧客可享小額折扣。",
     category: "daily",
     collocation: "a reusable shopping bag 可重複使用的購物袋",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-voucher",
@@ -250,7 +233,6 @@ export const dailyAdditions: Word[] = [
     translation: "飯店給每位房客一張附近咖啡店的早餐兌換券。",
     category: "daily",
     collocation: "a gift voucher 禮券",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-coupon",
@@ -264,7 +246,6 @@ export const dailyAdditions: Word[] = [
     translation: "使用這張折價券，下次購物可享九折優惠。",
     category: "daily",
     collocation: "a discount coupon 折價券",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-membership",
@@ -277,7 +258,6 @@ export const dailyAdditions: Word[] = [
     translation: "您的健身房會員資格包含游泳池使用權。",
     category: "daily",
     collocation: "an annual membership 年度會員資格",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-loyalty",
@@ -292,7 +272,6 @@ export const dailyAdditions: Word[] = [
     translation: "這家咖啡店以消費十次贈送一杯飲料的方式，回饋顧客的忠實支持。",
     category: "daily",
     collocation: "customer loyalty 顧客忠誠度",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-redeem",
@@ -306,7 +285,6 @@ export const dailyAdditions: Word[] = [
     translation: "您可以用獎勵點數兌換禮品卡。",
     category: "daily",
     collocation: "redeem points 使用點數兌換獎勵",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-affordable",
@@ -320,7 +298,6 @@ export const dailyAdditions: Word[] = [
     translation: "這個中心為當地居民提供價格實惠的運動課程。",
     category: "daily",
     collocation: "an affordable price 負擔得起的價格",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-selection",
@@ -333,7 +310,6 @@ export const dailyAdditions: Word[] = [
     translation: "這家書店提供種類豐富的烹飪書籍。",
     category: "daily",
     collocation: "a wide selection of products 種類豐富的商品",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-replenish",
@@ -347,7 +323,6 @@ export const dailyAdditions: Word[] = [
     translation: "店員在早晨尖峰時段前為貨架補貨。",
     category: "daily",
     collocation: "replenish supplies 補充用品",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-checkout",
@@ -361,7 +336,6 @@ export const dailyAdditions: Word[] = [
     translation: "請將您要購買的商品帶到入口附近的結帳處。",
     category: "daily",
     collocation: "a self-service checkout 自助結帳機台",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-delivery",
@@ -375,7 +349,6 @@ export const dailyAdditions: Word[] = [
     translation: "訂單金額超過五十元即可享免費配送。",
     category: "daily",
     collocation: "home delivery 宅配服務",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-complaint",
@@ -389,7 +362,6 @@ export const dailyAdditions: Word[] = [
     translation: "經理回覆了顧客針對包裹損壞提出的客訴。",
     category: "daily",
     collocation: "handle a complaint 處理客訴",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-satisfaction",
@@ -404,7 +376,6 @@ export const dailyAdditions: Word[] = [
     translation: "這份問卷請顧客評量對維修服務的滿意程度。",
     category: "daily",
     collocation: "customer satisfaction 顧客滿意度",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-assistance",
@@ -418,7 +389,6 @@ export const dailyAdditions: Word[] = [
     translation: "如果您使用售票機時需要協助，請洽工作人員。",
     category: "daily",
     collocation: "provide assistance 提供協助",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-announcement",
@@ -433,7 +403,6 @@ export const dailyAdditions: Word[] = [
     translation: "有關新營業時間的公告將刊登在我們的網站上。",
     category: "daily",
     collocation: "make an announcement 發布公告",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-notice",
@@ -448,7 +417,6 @@ export const dailyAdditions: Word[] = [
     translation: "大廳內的告示列出了游泳池暫停開放的日期。",
     category: "daily",
     collocation: "a written notice 書面通知",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-enrollment",
@@ -462,7 +430,6 @@ export const dailyAdditions: Word[] = [
     translation: "晚間語言課程將於星期一開放報名。",
     category: "daily",
     collocation: "course enrollment 課程報名",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-sanitation",
@@ -476,7 +443,6 @@ export const dailyAdditions: Word[] = [
     translation: "市政府正在更換老舊污水管線，以改善公共衛生。",
     category: "daily",
     collocation: "sanitation services 環境衛生服務",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-exhibit",
@@ -491,7 +457,6 @@ export const dailyAdditions: Word[] = [
     translation: "博物館最新的展示項目呈現了這座城市在一九二〇年代的照片。",
     category: "daily",
     collocation: "a museum exhibit 博物館展品或展示項目",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-exhibition",
@@ -506,7 +471,6 @@ export const dailyAdditions: Word[] = [
     translation: "這場攝影展將持續開放至六月底。",
     category: "daily",
     collocation: "hold an exhibition 舉辦展覽",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-venue",
@@ -520,7 +484,6 @@ export const dailyAdditions: Word[] = [
     translation: "主辦單位為今年的美食節選擇了更大的場地。",
     category: "daily",
     collocation: "an event venue 活動場地",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-audience",
@@ -535,7 +498,6 @@ export const dailyAdditions: Word[] = [
     translation: "演講者在簡報結束後邀請聽眾提問。",
     category: "daily",
     collocation: "a large audience 大批觀眾或聽眾",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-registration",
@@ -549,7 +511,6 @@ export const dailyAdditions: Word[] = [
     translation: "這場公益路跑的線上報名將於本週五截止。",
     category: "daily",
     collocation: "a registration form 報名表；登記表",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-donation",
@@ -562,7 +523,6 @@ export const dailyAdditions: Word[] = [
     translation: "每一筆捐款都將幫助收容所購買動物飼料。",
     category: "daily",
     collocation: "make a donation 捐款；捐贈",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-volunteer",
@@ -577,7 +537,6 @@ export const dailyAdditions: Word[] = [
     translation: "每位志工在社區中心服務前都會接受訓練。",
     category: "daily",
     collocation: "a volunteer coordinator 志工協調員",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-community",
@@ -592,7 +551,6 @@ export const dailyAdditions: Word[] = [
     translation: "新公園將為當地社區居民提供聚會場所。",
     category: "daily",
     collocation: "the local community 當地社區",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-resident",
@@ -606,7 +564,6 @@ export const dailyAdditions: Word[] = [
     translation: "每位住戶都可以向大樓管理處申請停車證。",
     category: "daily",
     collocation: "a local resident 當地居民",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-neighborhood",
@@ -619,7 +576,6 @@ export const dailyAdditions: Word[] = [
     translation: "今年有幾家小咖啡店在這個街區開幕。",
     category: "daily",
     collocation: "a residential neighborhood 住宅區",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-medication",
@@ -632,7 +588,6 @@ export const dailyAdditions: Word[] = [
     translation: "請向藥師詢問這種藥物應多久服用一次。",
     category: "daily",
     collocation: "take medication 服藥",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-precaution",
@@ -645,7 +600,6 @@ export const dailyAdditions: Word[] = [
     translation: "為了安全起見，游泳池在雷雨期間暫停開放。",
     category: "daily",
     collocation: "take precautions 採取預防措施",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-symptom",
@@ -658,7 +612,6 @@ export const dailyAdditions: Word[] = [
     translation: "請告訴醫師，您最初是在何時注意到每一項症狀。",
     category: "daily",
     collocation: "a common symptom 常見症狀",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-prescription",
@@ -672,7 +625,6 @@ export const dailyAdditions: Word[] = [
     translation: "前往藥局時，請攜帶您的處方箋。",
     category: "daily",
     collocation: "have a prescription filled 憑處方領藥",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-treatment",
@@ -687,7 +639,6 @@ export const dailyAdditions: Word[] = [
     translation: "這家診所提供輕傷治療，不需事先預約。",
     category: "daily",
     collocation: "receive medical treatment 接受醫療處置",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-recovery",
@@ -702,7 +653,6 @@ export const dailyAdditions: Word[] = [
     translation: "醫師預期她會在幾週內完全康復。",
     category: "daily",
     collocation: "make a full recovery 完全康復",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-nutrition",
@@ -716,7 +666,6 @@ export const dailyAdditions: Word[] = [
     translation: "這場工作坊教導家長營養與均衡飲食的相關知識。",
     category: "daily",
     collocation: "good nutrition 良好的營養攝取",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-ingredient",
@@ -731,7 +680,6 @@ export const dailyAdditions: Word[] = [
     translation: "如果您有食物過敏，請檢查標示上的每一項成分。",
     category: "daily",
     collocation: "fresh ingredients 新鮮食材",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-portion",
@@ -745,7 +693,6 @@ export const dailyAdditions: Word[] = [
     translation: "這家餐廳在午餐時段提供每道主菜的小份餐點。",
     category: "daily",
     collocation: "a generous portion 分量豐盛的一份餐點",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-expiration",
@@ -759,7 +706,6 @@ export const dailyAdditions: Word[] = [
     translation: "使用折價券前，請確認有效期限。",
     category: "daily",
     collocation: "an expiration date 到期日；有效期限",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-perishable",
@@ -773,7 +719,6 @@ export const dailyAdditions: Word[] = [
     translation: "易腐壞的食物應放在冰箱中，直到準備上桌時再取出。",
     category: "daily",
     collocation: "perishable goods 易腐壞的貨品",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-storage",
@@ -787,7 +732,6 @@ export const dailyAdditions: Word[] = [
     translation: "這間公寓在樓梯下方有額外的收納空間。",
     category: "daily",
     collocation: "storage space 儲存空間；收納空間",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-hygiene",
@@ -801,7 +745,6 @@ export const dailyAdditions: Word[] = [
     translation: "所有廚房員工都必須遵守嚴格的食品衛生規定。",
     category: "daily",
     collocation: "personal hygiene 個人衛生",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-queue",
@@ -816,7 +759,6 @@ export const dailyAdditions: Word[] = [
     translation: "您的來電已進入等候序列，稍後將為您接聽。",
     category: "daily",
     collocation: "a call queue 來電等候序列",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-reminder",
@@ -829,7 +771,6 @@ export const dailyAdditions: Word[] = [
     translation: "診所會在您預約的前一天發送提醒。",
     category: "daily",
     collocation: "an appointment reminder 預約提醒",
-    level: "700 分目標詞彙",
   },
   {
     id: "daily-optional",
@@ -843,6 +784,5 @@ export const dailyAdditions: Word[] = [
     translation: "導覽步行活動可自由參加，因此訪客也可以自行探索。",
     category: "daily",
     collocation: "an optional activity 自由參加的活動",
-    level: "700 分目標詞彙",
   },
 ];

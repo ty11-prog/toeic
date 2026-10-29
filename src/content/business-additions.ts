@@ -1,4 +1,4 @@
-import type { Word } from "../data";
+import type { WordEntry } from "../data";
 
 type BusinessEntry = [
   word: string,
@@ -615,7 +615,7 @@ const entries: BusinessEntry[] = [
   ],
 ];
 
-export const businessAdditions: Word[] = entries.map(
+export const businessAdditions: WordEntry[] = entries.map(
   ([
     word,
     phonetic,
@@ -636,6 +636,5 @@ export const businessAdditions: Word[] = entries.map(
     translation,
     category: "business",
     collocation,
-    level: "700 分目標詞彙",
   }),
 );
