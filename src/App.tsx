@@ -22,9 +22,11 @@ import {
   Play,
   RotateCcw,
   Search,
+  Settings2,
   ShoppingBag,
   Sparkles,
   Sprout,
+  Square,
   Sun,
   Target,
   TrendingUp,
@@ -33,12 +35,15 @@ import {
   X,
 } from "lucide-react";
 import LearningJournal from "./LearningJournal";
+import SpeechSettingsPanel from "./SpeechSettings";
+import { useSpeech } from "./useSpeech";
 import { words, grammarLessons, questions } from "./data";
 import type { Word, GrammarLesson, Question } from "./data";
 import { loadProgress, localDate, streak } from "./progress";
 import type { Progress } from "./progress";
 
-type Page = "home" | "vocabulary" | "grammar" | "quiz" | "saved" | "journal";
+type Page =
+  "home" | "vocabulary" | "grammar" | "quiz" | "saved" | "journal" | "settings";
 type Category = Word["category"] | "all";
 const categories = [
   {
@@ -81,6 +86,7 @@ const pageNames: Record<Page, string> = {
   quiz: "隨堂測驗",
   saved: "我的收藏",
   journal: "學習足跡",
+  settings: "語音設定",
 };
 const navItems = [
   { id: "home", icon: LayoutDashboard },
@@ -89,7 +95,45 @@ const navItems = [
   { id: "quiz", icon: CircleCheck },
   { id: "saved", icon: Bookmark },
   { id: "journal", icon: ChartNoAxesCombined },
+  { id: "settings", icon: Settings2 },
 ] as const;
+const mobileTabs = [
+  { id: "home", label: "今日", icon: LayoutDashboard },
+  { id: "vocabulary", label: "單字", icon: BookOpen },
+  { id: "grammar", label: "文法", icon: Book },
+  { id: "journal", label: "足跡", icon: ChartNoAxesCombined },
+  { id: "settings", label: "設定", icon: Settings2 },
+] as const;
+
+function ReadAloudButton({
+  text,
+  label,
+  speech,
+  caption = "聽例句",
+}: {
+  text: string;
+  label: string;
+  speech: ReturnType<typeof useSpeech>;
+  caption?: string;
+}) {
+  const active = speech.speakingText === text;
+  return (
+    <button
+      type="button"
+      className={`example-audio ${active ? "is-speaking" : ""}`}
+      aria-label={active ? `停止${label}` : label}
+      aria-pressed={active}
+      onClick={() => speech.speak(text)}
+    >
+      {active ? (
+        <Square size={14} fill="currentColor" />
+      ) : (
+        <Volume2 size={16} />
+      )}
+      <span>{active ? "停止朗讀" : caption}</span>
+    </button>
+  );
+}
 
 function DeskIllustration() {
   return (
@@ -213,7 +257,7 @@ function Dialog({
       if (event.key === "Escape") closeRef.current();
       if (event.key === "Tab") {
         const elements = ref.current?.querySelectorAll<HTMLElement>(
-          'button, a[href], input, [tabindex="0"]',
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]',
         );
         if (!elements?.length) return;
         const first = elements[0],
@@ -294,6 +338,16 @@ export default function App() {
   const [quizDone, setQuizDone] = useState(false);
   const [quizWrong, setQuizWrong] = useState<string[]>([]);
   const [today, setToday] = useState(localDate);
+  const speech = useSpeech(setToast);
+  const speak = speech.speak;
+  const closeLesson = () => {
+    speech.stop();
+    setLesson(null);
+  };
+  const closeStudy = () => {
+    speech.stop();
+    setStudyWords([]);
+  };
 
   useEffect(() => {
     setWordPage(1);
@@ -327,6 +381,7 @@ export default function App() {
       )
     : null;
   const navigate = (target: Page) => {
+    speech.stop();
     setPage(target);
     setMobileOpen(false);
     setSearch("");
@@ -351,30 +406,16 @@ export default function App() {
       saved ? `已取消收藏 ${word.word}` : `已收藏 ${word.word}，隨時回來複習。`,
     );
   };
-  const speak = (word: string) => {
-    if (!("speechSynthesis" in window)) {
-      setToast("此瀏覽器不支援朗讀，請參考單字音標。");
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(word);
-    speech.lang = "en-US";
-    speech.rate = 0.85;
-    speech.onerror = (event) => {
-      if (event.error !== "canceled" && event.error !== "interrupted") {
-        setToast("目前無法播放發音，請參考單字音標。");
-      }
-    };
-    window.speechSynthesis.speak(speech);
-  };
   const openStudy = (list: Word[]) => {
     if (!list.length) return;
+    speech.stop();
     setStudyWords(list);
     setStudyIndex(0);
     setFlipped(false);
     setStudiedCount(0);
   };
   const finishWord = (known: boolean) => {
+    speech.stop();
     const word = studyWords[studyIndex];
     if (known) {
       setProgress((previous) =>
@@ -430,6 +471,7 @@ export default function App() {
     );
   };
   const nextQuestion = () => {
+    speech.stop();
     if (quizIndex === quizSet.length - 1) {
       setQuizDone(true);
       setProgress((previous) => ({
@@ -461,7 +503,10 @@ export default function App() {
           <button
             key={item.id}
             className="grammar-row"
-            onClick={() => setLesson(item)}
+            onClick={() => {
+              speech.stop();
+              setLesson(item);
+            }}
           >
             <span className="lesson-number">
               {String(index + 1).padStart(2, "0")}
@@ -744,7 +789,16 @@ export default function App() {
                   <div className="daily-meaning">
                     <span>{todayWord.partOfSpeech}</span> {todayWord.meaning}
                   </div>
-                  <p className="daily-example">“{todayWord.example}”</p>
+                  <div className="daily-example-block">
+                    <p className="daily-example" lang="en">
+                      “{todayWord.example}”
+                    </p>
+                    <ReadAloudButton
+                      text={todayWord.example}
+                      label="朗讀每日例句"
+                      speech={speech}
+                    />
+                  </div>
                   <button
                     className="text-button"
                     onClick={() => openStudy([todayWord])}
@@ -1239,12 +1293,22 @@ export default function App() {
                           : `再記住一次就好。正確答案：${String.fromCharCode(65 + quizSet[quizIndex].answer)}`}
                       </strong>
                       <p>{quizSet[quizIndex].explanation}</p>
+                      <ReadAloudButton
+                        text={quizSet[quizIndex].prompt.replace(
+                          /_{3,}/g,
+                          quizSet[quizIndex].options[quizSet[quizIndex].answer],
+                        )}
+                        label="朗讀完整句子"
+                        caption="聽完整句"
+                        speech={speech}
+                      />
                     </div>
                   )}
                   <div className="quiz-panel-footer">
                     <button
                       className="text-button muted"
                       onClick={() => {
+                        speech.stop();
                         setQuizSet([]);
                         setQuizDone(false);
                       }}
@@ -1286,6 +1350,16 @@ export default function App() {
               />
             </>
           )}
+          {page === "settings" && (
+            <>
+              <PageHeading
+                eyebrow="FIND YOUR ENGLISH VOICE"
+                title="找到聽起來，最自在的英文。"
+                subtitle="選擇喜歡的聲音與語速，讓單字和例句一起走進記憶。"
+              />
+              <SpeechSettingsPanel speech={speech} />
+            </>
+          )}
           <footer className="page-footer">
             <span className="footer-logo">
               <Sun size={15} /> daylight.
@@ -1300,10 +1374,29 @@ export default function App() {
           </footer>
         </main>
       </div>
+      {!mobileOpen && !lesson && studyWords.length === 0 && (
+        <nav className="bottom-nav" aria-label="手機分頁導航">
+          {mobileTabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              className={page === id ? "active" : ""}
+              aria-current={page === id ? "page" : undefined}
+              onClick={() => {
+                if (id === "vocabulary") setCategory("all");
+                navigate(id);
+              }}
+            >
+              <Icon size={21} strokeWidth={page === id ? 2 : 1.6} />
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
       {lesson && (
         <Dialog
           title={lesson.title}
-          onClose={() => setLesson(null)}
+          onClose={closeLesson}
           className="lesson-dialog"
         >
           <span className="dialog-eyebrow">
@@ -1321,10 +1414,15 @@ export default function App() {
           </div>
           <div className="lesson-section">
             <h3>從例句看用法</h3>
-            {lesson.examples.map((example) => (
+            {lesson.examples.map((example, index) => (
               <div className="lesson-example" key={example.english}>
                 <p lang="en">{example.english}</p>
                 <span>{example.chinese}</span>
+                <ReadAloudButton
+                  text={example.english}
+                  label={`朗讀文法例句 ${index + 1}`}
+                  speech={speech}
+                />
               </div>
             ))}
           </div>
@@ -1346,7 +1444,7 @@ export default function App() {
                       lessons: [...previous.lessons, lesson.id],
                     }),
               );
-              setLesson(null);
+              closeLesson();
               setToast("文法主題已完成，來場小測驗鞏固記憶吧。");
             }}
           >
@@ -1360,7 +1458,7 @@ export default function App() {
       {studyWords.length > 0 && (
         <Dialog
           title="單字卡練習"
-          onClose={() => setStudyWords([])}
+          onClose={closeStudy}
           className="study-dialog"
         >
           {studyIndex >= studyWords.length ? (
@@ -1375,10 +1473,7 @@ export default function App() {
                 <br />
                 標記掌握 {studiedCount} 個。慢慢來，也很好。
               </p>
-              <button
-                className="button primary"
-                onClick={() => setStudyWords([])}
-              >
+              <button className="button primary" onClick={closeStudy}>
                 完成練習 <Check size={17} />
               </button>
             </div>
@@ -1449,6 +1544,11 @@ export default function App() {
                   <div className="study-example">
                     <p lang="en">{studyWords[studyIndex].example}</p>
                     <span>{studyWords[studyIndex].translation}</span>
+                    <ReadAloudButton
+                      text={studyWords[studyIndex].example}
+                      label="朗讀單字例句"
+                      speech={speech}
+                    />
                   </div>
                   <div className="collocation">
                     <Lightbulb size={16} />
