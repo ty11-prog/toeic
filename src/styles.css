@@ -281,8 +281,8 @@ button:not(:disabled):active {
 }
 @media (max-width: 520px) {
   .daily-example-block {
-    grid-column: 2;
-    grid-row: 4 / 6;
+    grid-column: 1 / -1;
+    grid-row: 5;
     margin: 0;
     min-width: 0;
   }
@@ -658,6 +658,9 @@ main {
   bottom: -9px;
 }
 .daily-word {
+  container-type: inline-size;
+  --daily-word-heading-size: 30px;
+  min-width: 0;
   border: 1px solid #ece7d6;
   border-radius: 12px;
   background: #fbf7e9;
@@ -703,12 +706,15 @@ main {
 }
 .daily-word h2 {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 30px;
+  font-size: clamp(18px, 2.3vw, 30px);
+  font-size: clamp(18px, 8.5cqw, var(--daily-word-heading-size));
   letter-spacing: -0.6px;
   font-weight: 400;
   margin-top: 10px;
   color: #4b513d;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 .pronunciation {
   display: flex;
@@ -1926,9 +1932,7 @@ main {
   }
   .daily-word {
     padding: 25px 28px;
-  }
-  .daily-word h2 {
-    font-size: 36px;
+    --daily-word-heading-size: 36px;
   }
   .daily-example {
     font-size: 15px;
@@ -2008,9 +2012,6 @@ main {
   }
   .daily-word {
     padding: 17px 18px;
-  }
-  .daily-word h2 {
-    font-size: 27px;
   }
   .daily-example {
     font-size: 13px;
@@ -2180,9 +2181,6 @@ main {
   }
   .daily-word {
     padding: 14px;
-  }
-  .daily-word h2 {
-    font-size: 24px;
   }
   .daily-word-date {
     font-size: 10px;
@@ -2500,9 +2498,6 @@ main {
   .daily-word {
     padding: 15px;
   }
-  .daily-word h2 {
-    font-size: 24px;
-  }
   .stats-strip {
     margin-bottom: 30px;
     padding: 18px 0;
@@ -2668,7 +2663,7 @@ main {
   .daily-word {
     padding: 18px 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 15px;
     row-gap: 0;
     position: relative;
@@ -2681,15 +2676,16 @@ main {
     font-size: 12px;
   }
   .daily-word-date {
-    grid-column: 1;
+    grid-column: 1 / -1;
     margin-top: 8px;
     font-size: 10px;
     letter-spacing: 0.9px;
   }
   .daily-word h2 {
-    grid-column: 1;
+    grid-column: 1 / -1;
     grid-row: 3;
-    font-size: 28px;
+    font-size: clamp(24px, 8vw, 28px);
+    font-size: clamp(24px, 8.5cqw, 28px);
     margin-top: 8px;
   }
   .daily-word .pronunciation {
@@ -2699,7 +2695,7 @@ main {
   }
   .daily-meaning {
     grid-column: 2;
-    grid-row: 2/4;
+    grid-row: 4;
     align-self: center;
     margin: 0;
     font-size: 13px;
