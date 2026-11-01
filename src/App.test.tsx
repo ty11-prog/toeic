@@ -142,11 +142,12 @@ describe("English learning journeys", () => {
     await user.click(screen.getByRole("button", { name: /綜合小測驗/ }));
     expect(screen.getByRole("button", { name: "確認答案" })).toBeDisabled();
     const question = currentQuestion();
-    const wrongAnswer =
-      question.options[(question.answer + 1) % question.options.length];
+    const wrongIndex = (question.answer + 1) % question.options.length;
+    const wrongAnswer = question.options[wrongIndex];
     await user.click(
       screen.getByRole("button", {
-        name: new RegExp(wrongAnswer.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+        name: `${String.fromCharCode(65 + wrongIndex)} ${wrongAnswer}`,
+        exact: true,
       }),
     );
     await user.click(screen.getByRole("button", { name: "確認答案" }));
