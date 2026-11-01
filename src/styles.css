@@ -2983,29 +2983,33 @@ main {
     gap: 14px;
   }
   .category-card {
-    display: flex;
+    display: grid;
+    grid-template-columns: clamp(64px, 20vw, 84px) minmax(0, 1fr);
+    align-items: stretch;
     min-height: 149px;
   }
   .category-art {
+    align-self: stretch;
     height: auto;
-    width: 33%;
-    min-width: 100px;
-    flex-shrink: 0;
+    min-height: 0;
+    width: auto;
+    min-width: 0;
+    padding: 16px 6px;
   }
   .category-icon {
-    height: 62px;
-    width: 62px;
+    height: 52px;
+    width: 52px;
   }
   .category-icon svg {
-    width: 34px;
+    width: 32px;
   }
   .card-level {
     font-size: 10px;
     padding: 4px;
   }
   .art-spark {
-    left: 15px;
-    top: 23px;
+    left: calc(50% - 20px);
+    top: calc(50% - 52px);
     font-size: 14px;
   }
   .line-one {
