@@ -147,7 +147,6 @@ describe("English learning journeys", () => {
     await user.click(
       screen.getByRole("button", {
         name: `${String.fromCharCode(65 + wrongIndex)} ${wrongAnswer}`,
-        exact: true,
       }),
     );
     await user.click(screen.getByRole("button", { name: "確認答案" }));
