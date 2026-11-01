@@ -569,10 +569,10 @@ export default function App() {
               <span className="art-line line-one" />
               <span className="art-line line-two" />
               <span className="art-spark">✦</span>
-              <span className="card-level">600–990 混合選材</span>
             </div>
             <div className="category-copy">
               <span className="eyebrow">{item.english}</span>
+              <span className="card-level">600–990 混合選材</span>
               <h3>
                 {item.title}
                 <ArrowRight size={18} />
